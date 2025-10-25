@@ -25,4 +25,10 @@ describe("QueryProcessor", () => {
             "Rohan"
           ));
     })
+
+    it("should return andrew id when asked", () => {
+     const query = "What is your Andrew ID?";
+     const response = QueryProcessor(query);
+     expect(response).toBe("tbouri");
+   });
 });
