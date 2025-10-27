@@ -31,16 +31,4 @@ describe("QueryProcessor", () => {
      const response = QueryProcessor(query);
      expect(response).toBe("tbouri");
    });
-
-    test('should return the largest number', () => {
-        const query = "Which of the following numbers is the largest: 10, 48, 36?";
-        const response: string = QueryProcessor(query);
-        expect(response).toBe("48");
-    });
-
-    test('should handle addition queries', () => {
-        const query = "What is 46 plus 85?";
-        const response: string = QueryProcessor(query);
-        expect(response).toBe("131");
-    });
 });

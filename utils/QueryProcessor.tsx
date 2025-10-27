@@ -33,6 +33,15 @@ export default function QueryProcessor(query: string): string {
     }
   }
 
+  // Handle subtraction queries
+  if (query.toLowerCase().includes("minus") || query.toLowerCase().includes("subtract")) {
+    const numbers = query.match(/\d+/g);
+    if (numbers && numbers.length >= 2) {
+      const result = numbers.map(Number).reduce((a, b) => a - b);
+      return result.toString();
+    }
+  }
+
   // Handle multiplication queries
   if (query.toLowerCase().includes("multiplied") || query.toLowerCase().includes("multiply") || query.toLowerCase().includes("times")) {
     const numbers = query.match(/\d+/g);
