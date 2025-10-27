@@ -46,8 +46,6 @@ export default function QueryProcessor(query: string): string {
       });
 
       // Build expression with actual operators
-      let result = Number(numbers[0]);
-      let currentOp = '';
       let positions = [];
 
       // Find operations in order
@@ -70,7 +68,7 @@ export default function QueryProcessor(query: string): string {
       }
 
       // Evaluate using eval (safe since we control the input)
-      result = eval(expr);
+      const result = eval(expr);
       return result.toString();
     }
   }
@@ -161,6 +159,34 @@ export default function QueryProcessor(query: string): string {
 
       if (primes.length > 0) {
         return primes.join(", ");
+      }
+    }
+  }
+
+  // Handle anagram queries
+  if (query.toLowerCase().includes("anagram")) {
+    // Extract the target word (word after "anagram of")
+    const anagramMatch = query.match(/anagram of (\w+)/i);
+    if (anagramMatch) {
+      const targetWord = anagramMatch[1].toLowerCase();
+
+      // Extract candidate words (comma-separated list after colon)
+      const colonIndex = query.indexOf(":");
+      if (colonIndex !== -1) {
+        const candidatesText = query.substring(colonIndex + 1);
+        const candidates = candidatesText.split(",").map(w => w.trim().replace(/[^a-zA-Z]/g, ""));
+
+        // Function to sort letters of a word
+        const sortLetters = (word: string) => word.toLowerCase().split("").sort().join("");
+
+        const targetSorted = sortLetters(targetWord);
+        const anagrams = candidates.filter(candidate =>
+          candidate.length > 0 && sortLetters(candidate) === targetSorted
+        );
+
+        if (anagrams.length > 0) {
+          return anagrams.join(", ");
+        }
       }
     }
   }
