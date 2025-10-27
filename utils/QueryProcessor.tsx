@@ -24,6 +24,57 @@ export default function QueryProcessor(query: string): string {
     }
 }
 
+  // Handle compound arithmetic expressions (e.g., "32 plus 19 multiplied by 82")
+  const lowerQuery = query.toLowerCase();
+  const hasMultipleOps = [
+    lowerQuery.includes("plus") || lowerQuery.includes("add"),
+    lowerQuery.includes("minus") || lowerQuery.includes("subtract"),
+    lowerQuery.includes("multiplied") || lowerQuery.includes("multiply") || lowerQuery.includes("times"),
+    lowerQuery.includes("divided") || lowerQuery.includes("divide")
+  ].filter(Boolean).length > 1;
+
+  if (hasMultipleOps) {
+    const numbers = query.match(/\d+/g);
+    if (numbers && numbers.length >= 2) {
+      // Parse the expression respecting order of operations
+      let expression = query.toLowerCase();
+      const nums = numbers.map(Number);
+
+      // Replace word operators with symbols
+      expression = expression.replace(/\d+/g, (match) => {
+        return nums.shift()?.toString() || match;
+      });
+
+      // Build expression with actual operators
+      let result = Number(numbers[0]);
+      let currentOp = '';
+      let positions = [];
+
+      // Find operations in order
+      if (lowerQuery.includes("plus")) positions.push({ pos: lowerQuery.indexOf("plus"), op: "+", word: "plus" });
+      if (lowerQuery.includes("add")) positions.push({ pos: lowerQuery.indexOf("add"), op: "+", word: "add" });
+      if (lowerQuery.includes("minus")) positions.push({ pos: lowerQuery.indexOf("minus"), op: "-", word: "minus" });
+      if (lowerQuery.includes("subtract")) positions.push({ pos: lowerQuery.indexOf("subtract"), op: "-", word: "subtract" });
+      if (lowerQuery.includes("multiplied")) positions.push({ pos: lowerQuery.indexOf("multiplied"), op: "*", word: "multiplied" });
+      if (lowerQuery.includes("multiply") && !lowerQuery.includes("multiplied")) positions.push({ pos: lowerQuery.indexOf("multiply"), op: "*", word: "multiply" });
+      if (lowerQuery.includes("times")) positions.push({ pos: lowerQuery.indexOf("times"), op: "*", word: "times" });
+      if (lowerQuery.includes("divided")) positions.push({ pos: lowerQuery.indexOf("divided"), op: "/", word: "divided" });
+      if (lowerQuery.includes("divide") && !lowerQuery.includes("divided")) positions.push({ pos: lowerQuery.indexOf("divide"), op: "/", word: "divide" });
+
+      positions.sort((a, b) => a.pos - b.pos);
+
+      // Build expression string
+      let expr = numbers[0];
+      for (let i = 0; i < positions.length && i + 1 < numbers.length; i++) {
+        expr += " " + positions[i].op + " " + numbers[i + 1];
+      }
+
+      // Evaluate using eval (safe since we control the input)
+      result = eval(expr);
+      return result.toString();
+    }
+  }
+
   // Handle addition queries
   if (query.toLowerCase().includes("plus") || query.toLowerCase().includes("add")) {
     const numbers = query.match(/\d+/g);
