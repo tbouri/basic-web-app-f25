@@ -51,6 +51,15 @@ export default function QueryProcessor(query: string): string {
     }
   }
 
+  // Handle division queries
+  if (query.toLowerCase().includes("divided") || query.toLowerCase().includes("divide")) {
+    const numbers = query.match(/\d+/g);
+    if (numbers && numbers.length >= 2) {
+      const result = numbers.map(Number).reduce((a, b) => a / b);
+      return result.toString();
+    }
+  }
+
   // Handle queries about numbers that are both squares and cubes
   if (query.toLowerCase().includes("square and") && query.toLowerCase().includes("cube")) {
     const numbers = query.match(/\d+/g);
