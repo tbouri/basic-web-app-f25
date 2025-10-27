@@ -64,8 +64,14 @@ export default function QueryProcessor(query: string): string {
   if (query.toLowerCase().includes("square and") && query.toLowerCase().includes("cube")) {
     const numbers = query.match(/\d+/g);
     if (numbers && numbers.length > 0) {
-      const isPerfectSquare = (n: number) => Math.sqrt(n) === Math.floor(Math.sqrt(n));
-      const isPerfectCube = (n: number) => Math.cbrt(n) === Math.floor(Math.cbrt(n));
+      const isPerfectSquare = (n: number) => {
+        const sqrt = Math.round(Math.sqrt(n));
+        return sqrt * sqrt === n;
+      };
+      const isPerfectCube = (n: number) => {
+        const cbrt = Math.round(Math.cbrt(n));
+        return cbrt * cbrt * cbrt === n;
+      };
 
       const result = numbers.map(Number).filter(n => isPerfectSquare(n) && isPerfectCube(n));
 
