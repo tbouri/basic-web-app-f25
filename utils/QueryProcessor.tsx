@@ -8,12 +8,21 @@ export default function QueryProcessor(query: string): string {
   }
 
   if (query.toLowerCase().includes("name")) {
-    return "Rohan";
+    return "tb";
   }
 
   if (query.toLowerCase().includes("what is your andrew id")) {
      return "tbouri";
    }
+
+  // Handle queries asking for the largest number
+  if (query.toLowerCase().includes("largest") || query.toLowerCase().includes("biggest")) {
+    const numbers = query.match(/\d+/g);
+    if (numbers && numbers.length > 0) {
+      const max = Math.max(...numbers.map(Number));
+      return max.toString();
+    }
+  }
 
   return "";
 }
