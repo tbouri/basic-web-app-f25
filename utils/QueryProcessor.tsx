@@ -60,6 +60,17 @@ export default function QueryProcessor(query: string): string {
     }
   }
 
+  // Handle power/exponentiation queries
+  if (query.toLowerCase().includes("power") || query.toLowerCase().includes("exponent")) {
+    const numbers = query.match(/\d+/g);
+    if (numbers && numbers.length >= 2) {
+      const base = Number(numbers[0]);
+      const exponent = Number(numbers[1]);
+      const result = Math.pow(base, exponent);
+      return result.toString();
+    }
+  }
+
   // Handle queries about numbers that are both squares and cubes
   if (query.toLowerCase().includes("square and") && query.toLowerCase().includes("cube")) {
     const numbers = query.match(/\d+/g);
