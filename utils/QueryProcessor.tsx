@@ -16,13 +16,13 @@ export default function QueryProcessor(query: string): string {
    }
 
   // Handle queries asking for the largest number
-  if (query.toLowerCase().includes("largest") || query.toLowerCase().includes("biggest")) {
+    if (query.toLowerCase().includes("largest") || query.toLowerCase().includes("biggest")) {
     const numbers = query.match(/\d+/g);
     if (numbers && numbers.length > 0) {
-      const max = Math.max(...numbers.map(Number));
-      return max.toString();
+        const max = Math.max(...numbers.map(Number));
+        return max.toString();
     }
-  }
+}
 
   // Handle addition queries
   if (query.toLowerCase().includes("plus") || query.toLowerCase().includes("add")) {
