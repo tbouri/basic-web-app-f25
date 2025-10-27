@@ -33,5 +33,14 @@ export default function QueryProcessor(query: string): string {
     }
   }
 
+  // Handle multiplication queries
+  if (query.toLowerCase().includes("multiplied") || query.toLowerCase().includes("multiply") || query.toLowerCase().includes("times")) {
+    const numbers = query.match(/\d+/g);
+    if (numbers && numbers.length >= 2) {
+      const product = numbers.map(Number).reduce((a, b) => a * b, 1);
+      return product.toString();
+    }
+  }
+
   return "";
 }
